@@ -11,18 +11,32 @@ var users = require('./routes/users');
 
 var app = express();
 
-var database = 'estudo_pdocomphp';
-var table    = 'clientes';
+var database = 'challenge_sejaspot';
+var table    = 'post';
 
-var client = mysql.createConnection({
+var blog = mysql.createConnection({
 	host     : 'localhost',
 	user     : 'elscode',
 	password : '',
 	database : database
 });
 
+blog.connect();
 
 
+//Config
+app.listen(3000, () => console.log('Example app listening on port 3000!'));
+app.get('/', (req, res) => res.send('Hello World!'))
+
+app.get('/post',function(req, res){
+	blog.query('SELECT * FROM ' + table, function (error, results, fields) {
+		if (error) throw error;
+		res.render('list_post',{
+			posts: results,
+			title: 'Listar Posts'
+		});
+	});
+})
 
 
 // view engine setup
