@@ -1,5 +1,5 @@
 {
-  "name": "nodeapp",
+  "name": "sejaspotchallenge",
   "version": "0.0.0",
   "private": true,
   "scripts": {
@@ -11,7 +11,10 @@
     "debug": "~2.6.9",
     "express": "~4.15.5",
     "jade": "~1.11.0",
+    "listen": "^1.0.1",
     "morgan": "~1.9.0",
-    "serve-favicon": "~2.4.5"
+    "mysql": "^2.15.0",
+    "serve-favicon": "~2.4.5",
+    "util": "^0.10.3"
   }
 }

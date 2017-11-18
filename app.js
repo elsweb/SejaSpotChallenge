@@ -26,10 +26,9 @@ var blog = mysql.createConnection({
 
 blog.connect();
 
-
 //Config Linsten Port
-app.listen(3000, () => console.log('Example app listening on port 3000!'));
-app.get('/', (req, res) => res.send('Hello World!'))
+app.listen(3030, () => console.log('Example app listening on port 3030!'));
+//app.get('/', (req, res) => res.send('Hello World!'))
 
 //READ list Post
 app.get('/post',function(req, res){
@@ -68,6 +67,7 @@ app.get('/post/remove/:id',function(req,res){
 	blog.query('DELETE FROM '+ table +' WHERE post_id = "'+req.params.id+'"');
 	res.redirect('/post');	
 })
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
