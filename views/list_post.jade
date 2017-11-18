@@ -5,4 +5,6 @@ hr
 ul
 	each post in posts
 		li
-			a(href='/post/view/#{post.post_id}') #{post.post_title}
+			a(href='/post/view/#{post.post_id}') #{post.post_title} - 
+			a(href='/post/remove/#{post.post_id}') Apagar
+			
