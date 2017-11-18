@@ -58,9 +58,16 @@ app.get('/post/add',function(req,res){
 app.post('/post/add',urlencodedParser,function(req,res){
 	var post_title = req.body.post_title;	
 	blog.query('INSERT INTO '+ table +' '+
-	' SET post_title =  ? ', post_title);
+	' SET post_title =  ? '
+	, post_title
+	);
 	res.redirect('/post');	
 });
+// DELETE post
+app.get('/post/remove/:id',function(req,res){
+	blog.query('DELETE FROM '+ table +' WHERE post_id = "'+req.params.id+'"');
+	res.redirect('/post');	
+})
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
