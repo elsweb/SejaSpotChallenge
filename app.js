@@ -28,7 +28,11 @@ blog.connect();
 
 //Config Linsten Port
 app.listen(3030, () => console.log('Example app listening on port 3030!'));
-//app.get('/', (req, res) => res.send('Hello World!'))
+app.get('/', function(req, res) {
+    res.render('index', {
+        title : 'SejaSpotChallenge Project'
+    });
+});
 
 //READ list Post
 app.get('/post',function(req, res){
