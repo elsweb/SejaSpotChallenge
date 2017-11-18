@@ -10,6 +10,9 @@ var index = require('./routes/index');
 var users = require('./routes/users');
 
 var app = express();
+var jsonParser = bodyParser.json()
+var urlencodedParser = bodyParser.urlencoded({ extended: false })
+
 
 var database = 'challenge_sejaspot';
 var table    = 'post';
@@ -24,10 +27,11 @@ var blog = mysql.createConnection({
 blog.connect();
 
 
-//Config
+//Config Linsten Port
 app.listen(3000, () => console.log('Example app listening on port 3000!'));
 app.get('/', (req, res) => res.send('Hello World!'))
 
+//READ list Post
 app.get('/post',function(req, res){
 	blog.query('SELECT * FROM ' + table, function (error, results, fields) {
 		if (error) throw error;
@@ -37,7 +41,7 @@ app.get('/post',function(req, res){
 		});
 	});
 });
-
+//READ single post
 app.get('/post/view/:id',function(req, res){
 	blog.query('SELECT * FROM ' + table + ' WHERE post_id = "'+req.params.id+'"', function (error, results, fields) {
 		if (error) throw error;
@@ -46,6 +50,16 @@ app.get('/post/view/:id',function(req, res){
 			title: results.post_title
 		});
 	});
+});
+// CREATE new post
+app.get('/post/add',function(req,res){
+	res.render('form_post',{title: 'Cadastrar post'});
+});
+app.post('/post/add',urlencodedParser,function(req,res){
+	var post_title = req.body.post_title;	
+	blog.query('INSERT INTO '+ table +' '+
+	' SET post_title =  ? ', post_title);
+	res.redirect('/post');	
 });
 
 // view engine setup
