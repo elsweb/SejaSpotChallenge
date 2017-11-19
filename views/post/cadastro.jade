@@ -1,0 +1,10 @@
+extends ../layout
+block content
+	div(class="box-form")
+		form(method='POST' , action='/post/create', role='form')
+			h1(class="post-title") Cadastrar postagem
+			div(class="form-group")
+				label(for="exampleInputEmail1") Título
+				input(type="text" class="form-control" id="post_title" placeholder="Escreva um título para a postagem")
+				small(id="title_help" class="form-text text-muted") Escreva um título pequeno e chamativo.
+			button(type="submit" class="btn btn-primary pull-right") Cadastrar
