@@ -27,8 +27,8 @@ var conn = mysql.createConnection({
 //Config
 load('controllers').then('models').then('routes').into(app);
 
-app.listen(3030, () => console.log('Server Listening on port 3030!'));
-app.get('/', function(req, res) {res.render('index', {title : 'SejaSpotChallenge Project'});});
+app.listen(3030, () => console.log('Server listening on port 3030!'));
+//app.get('/', function(req, res) {res.render('index', {title : 'SejaSpotChallenge Project'});});
 
 //CRUD
 conn.connect();
