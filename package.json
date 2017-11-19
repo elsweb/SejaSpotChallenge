@@ -10,6 +10,8 @@
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.9",
     "express": "~4.15.5",
+    "express-load": "^1.1.16",
+    "express-session": "^1.15.6",
     "jade": "~1.11.0",
     "listen": "^1.0.1",
     "morgan": "~1.9.0",
