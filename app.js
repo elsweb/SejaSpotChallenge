@@ -1,22 +1,22 @@
 var express = require('express');
+var load = require('express-load');
 var mysql = require('mysql');
 var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var session = require('express-session')
 
-var index = require('./routes/index');
-var users = require('./routes/users');
+//var index = require('./routes/index');
+//var users = require('./routes/users');
 
 var app = express();
 var jsonParser = bodyParser.json()
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
 
-
-var database = 'challenge_sejaspot';
 var table    = 'post';
-
+var database = 'challenge_sejaspot';
 var conn = mysql.createConnection({
 	host     : 'localhost',
 	user     : 'elscode',
@@ -24,16 +24,14 @@ var conn = mysql.createConnection({
 	database : database
 });
 
+//Config
+load('controllers').then('models').then('routes').into(app);
+
+app.listen(3030, () => console.log('Server Listening on port 3030!'));
+app.get('/', function(req, res) {res.render('index', {title : 'SejaSpotChallenge Project'});});
+
+//CRUD
 conn.connect();
-
-//Config Linsten Port
-app.listen(3030, () => console.log('Example app listening on port 3030!'));
-app.get('/', function(req, res) {
-    res.render('index', {
-        title : 'SejaSpotChallenge Project'
-    });
-});
-
 //READ list Post
 app.get('/post',function(req, res){
 	conn.query('SELECT * FROM ' + table, function (error, results, fields) {
@@ -61,9 +59,9 @@ app.get('/post/add',function(req,res){
 app.post('/post/add',urlencodedParser,function(req,res){
 	var post_title = req.body.post_title;	
 	conn.query('INSERT INTO '+ table +' '+
-	' SET post_title =  ? '
-	, post_title
-	);
+		' SET post_title =  ? '
+		, post_title
+		);
 	res.redirect('/post');	
 });
 // DELETE post
@@ -83,10 +81,11 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
+//app.use(session({secret: 'sejaspotchallengeproject19112017'}))
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', index);
-app.use('/users', users);
+//app.use('/', index);
+//app.use('/users', users);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
