@@ -17,14 +17,14 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false })
 var database = 'challenge_sejaspot';
 var table    = 'post';
 
-var blog = mysql.createConnection({
+var conn = mysql.createConnection({
 	host     : 'localhost',
 	user     : 'elscode',
 	password : '',
 	database : database
 });
 
-blog.connect();
+conn.connect();
 
 //Config Linsten Port
 app.listen(3030, () => console.log('Example app listening on port 3030!'));
@@ -36,7 +36,7 @@ app.get('/', function(req, res) {
 
 //READ list Post
 app.get('/post',function(req, res){
-	blog.query('SELECT * FROM ' + table, function (error, results, fields) {
+	conn.query('SELECT * FROM ' + table, function (error, results, fields) {
 		if (error) throw error;
 		res.render('list_post',{
 			posts: results,
@@ -46,7 +46,7 @@ app.get('/post',function(req, res){
 });
 //READ single post
 app.get('/post/view/:id',function(req, res){
-	blog.query('SELECT * FROM ' + table + ' WHERE post_id = "'+req.params.id+'"', function (error, results, fields) {
+	conn.query('SELECT * FROM ' + table + ' WHERE post_id = "'+req.params.id+'"', function (error, results, fields) {
 		if (error) throw error;
 		res.render('single_post',{
 			post: results,
@@ -60,7 +60,7 @@ app.get('/post/add',function(req,res){
 });
 app.post('/post/add',urlencodedParser,function(req,res){
 	var post_title = req.body.post_title;	
-	blog.query('INSERT INTO '+ table +' '+
+	conn.query('INSERT INTO '+ table +' '+
 	' SET post_title =  ? '
 	, post_title
 	);
@@ -68,11 +68,11 @@ app.post('/post/add',urlencodedParser,function(req,res){
 });
 // DELETE post
 app.get('/post/remove/:id',function(req,res){
-	blog.query('DELETE FROM '+ table +' WHERE post_id = "'+req.params.id+'"');
+	conn.query('DELETE FROM '+ table +' WHERE post_id = "'+req.params.id+'"');
 	res.redirect('/post');	
 })
 
-
+conn.end();
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
