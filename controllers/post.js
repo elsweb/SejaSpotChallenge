@@ -1,4 +1,6 @@
 module.exports = function(app){
+	var conn  = require('../config/mysql')();
+	var table    = 'post';		
 	var PostControll = {
 		index: function(req,res){
 			res.render('post/index', {title : 'Post - SejaSpotChallenge'});
@@ -7,7 +9,12 @@ module.exports = function(app){
 			res.render('post/cadastro', {title : 'cadastro'});
 		},
 		read: function(req,res){
-			res.render('post/consulta', {title : 'consulta'});
+			conn.connect();
+			conn.query('SELECT * FROM ' + table, function (error, results, fields) {
+				if (error) throw error;
+					res.render('post/consulta',{posts: results,title: 'Post | Consulta'});
+				});
+			conn.end();	
 		}		
 	}
 	return PostControll;
