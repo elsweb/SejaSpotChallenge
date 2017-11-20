@@ -1,6 +1,6 @@
-module.exports = function(){
-	var mysql = require('mysql');
-	var database = 'challenge_sejaspot';
+var mysql = require('mysql');
+var database = 'challenge_sejaspot';
+function conect(){	
 	var conn = mysql.createConnection({
 		host     : 'localhost',
 		user     : 'elscode',
@@ -8,4 +8,7 @@ module.exports = function(){
 		database : database
 	});
 	return conn;
+}
+module.exports = function(){
+	return conect();
 }
