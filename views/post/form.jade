@@ -1,12 +1,15 @@
 extends ../layout
 block content
-	div(class="box-form")
-		form(method='POST' , action='/post/cadastro', role='form')
-			h1(class="post-title") Cadastro de postagem
+	div(class="box-form")		
+		form(method='POST' , action='/post/'+ form +'/', role='form')
+			h1(class="post-title") #{title}
 			div(class="form-group")
 				label(for="exampleInputEmail1") Título
 				input(type="text" class="form-control" name="post_title" placeholder="Escreva um título para a postagem")
 				small(id="title_help" class="form-text text-muted") Escreva um título pequeno e chamativo.
 				input(type="text" class="form-control" name="post_content" placeholder="Escreva sobre o post")
 				small(id="title_help" class="form-text text-muted") Escreva um título pequeno e chamativo.
-			button(type="submit" class="btn btn-primary pull-right") Cadastrar
+			if form === 'create'
+				button(type="submit" class="btn btn-primary pull-right") Cadastrar
+			else
+				button(type="submit" class="btn btn-primary pull-right") Atualizar
