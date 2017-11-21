@@ -2,20 +2,23 @@ extends ../layout
 block content
 	table(class="table table-responsive")
 		h1(class="post-title") Consulta de postagem
-		thead(class="thead-inverse")
-			tr
-				th ID
-				th Título
-				th Autor
-				th 
-				th 
-		tbody
-		each post in posts
-			tr
-				th(scope="row") #{post.post_id}
-				th #{post.post_title}
-				th Emanuel
-				th 
-					a(href='/post/remove/#{post.post_id}') Editar
-				th
-					a(href='/post/remove/#{post.post_id}') Apagar
+		if posts.length > 0
+			thead(class="thead-inverse")
+				tr
+					th ID
+					th Título
+					th Autor
+					th 
+					th 
+			tbody
+				each post in posts
+					tr
+						th(scope="row") #{post.post_id}
+						th #{post.post_title}
+						th Emanuel
+						th 
+							a(href='/post/remove/#{post.post_id}') Editar
+						th
+							a(href='/post/remove/#{post.post_id}') Apagar
+		else
+			p Nenhum registro encontrado
