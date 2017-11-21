@@ -4,6 +4,9 @@ function PostDAO(conn){
 PostDAO.prototype.ListAll = function(callback){
 	this._conn.query('SELECT * FROM post',callback);
 }
+PostDAO.prototype.Read = function(id,callback){
+	this._conn.query('SELECT * FROM post WHERE post_id = ?', id, callback);
+}
 PostDAO.prototype.Create = function(array,callback){
 	var sql = "INSERT INTO post (post_title, post_content) VALUES ?";
 	var values = [[
