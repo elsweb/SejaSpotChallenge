@@ -15,7 +15,7 @@ block content
 				button(type="submit" class="btn btn-primary pull-right") Atualizar
 	if erroValidator
 		div(class="box-form")
-			div(class="alert alert-danger")			
+			div(class="alert alert-danger")
 				- for (var i = 0; i < erroValidator.length; ++i) {
 					div #{erroValidator[0].msg}
 						a(href="#" class="close" data-dismiss="alert" aria-label="close") &times
