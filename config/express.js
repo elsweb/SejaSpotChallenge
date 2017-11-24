@@ -9,7 +9,7 @@ module.exports = function(){
 	app.set('views', './views');
 	app.use(express.static('./public'));
 	app.use(bodyParser.json());
-	app.use(bodyParser.urlencoded({ extended: false }));
+	app.use(bodyParser.urlencoded({ extended: true }));
 	app.use(cookieParser('keyboard cat'));
 	app.use(session({ cookie: { maxAge: 60000 }}));
 	app.use(flash());
