@@ -24,20 +24,30 @@ module.exports = function(app){
 			});			
 		},
 		form: function(req,res){
-			res.render('post/form', {form:'create', title : 'Cadastrar Postagem'});
+			res.render('post/form', {form:'create',post:{}, title : 'Cadastrar Postagem'});
 		},
 		create: function(req,res){
 			var array = req.body;
 			var conn  = require('../config/mysql')();
 			var PostModel  = require('../DAO/Post')();
 			var Post = new PostModel(conn);			
-			Post.Create(array, function(error, results){
-				if (error) {
-					console.log(error);
-				}else{
-					res.redirect('/post/consulta');
-				}
-			});			
+			
+			var validatorTitle = req.assert('post_title','Título é Obrigatório').notEmpty();
+			var error = req.validationErrors();
+			console.log(error);
+			if(error){
+				res.render('post/form',{form:'create' , erroValidator: error, post: array, title : 'Cadastrar Postagem'});
+				return;
+			}else{
+				Post.Create(array, function(error, results){
+					if (error) {
+						console.log(error);
+					}else{
+						res.redirect('/post/consulta');
+					}
+				});	
+			}
+						
 		},
 		update: function(req,res){
 			var id = req.params.id;
