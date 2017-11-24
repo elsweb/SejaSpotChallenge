@@ -34,9 +34,15 @@ module.exports = function(app){
 			
 			var validatorTitle = req.assert('post_title','Título é Obrigatório').notEmpty();
 			var error = req.validationErrors();
-			console.log(error);
 			if(error){
-				res.render('post/form',{form:'create' , erroValidator: error, post: array, title : 'Cadastrar Postagem'});
+				res.format({
+					html: function(){
+						res.status(400).render('post/form',{form:'create' , erroValidator: error, post: array, title : 'Cadastrar Postagem'});
+					},
+					json: function(){
+						res.status(400).json(error);
+					}
+				});
 				return;
 			}else{
 				Post.Create(array, function(error, results){
