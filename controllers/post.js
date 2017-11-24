@@ -11,9 +11,16 @@ module.exports = function(app){
 				if (error) {
 					req.flash('erro','Erro ao Listar Postagens' + error);
 				}else{
-					res.render('post/consulta',{posts: results,title: 'Post | Consulta'});
-				}
-			conn.end();				
+					res.format({
+						html:function(){
+							res.render('post/consulta',{posts: results,title: 'Consultar Postagem'});
+						},
+						json:function(){
+							res.json(results);
+						}
+					});					
+					conn.end();
+				}							
 			});			
 		},
 		form: function(req,res){
@@ -28,14 +35,7 @@ module.exports = function(app){
 				if (error) {
 					console.log(error);
 				}else{
-					Post.ListAll(function(error, results){
-						if (error) {
-							req.flash('erro','Erro ao Listar Postagens' + error);
-						}else{
-							res.render('post/consulta',{posts: results, title: 'Post | Consulta'});
-						}
-					conn.end();			
-					});
+					res.redirect('/post/consulta');
 				}
 			});			
 		},
@@ -74,14 +74,7 @@ module.exports = function(app){
 				if (error) {
 					console.log(error);
 				}else{
-					Post.ListAll(function(error, results){
-						if (error) {
-							req.flash('erro','Erro ao Listar Postagens' + error);
-						}else{
-							res.render('post/consulta',{posts: results,title: 'Post | Consulta'});
-						}
-					conn.end();			
-					});
+					res.redirect('/post/consulta');
 				}
 			});						
 		}				
