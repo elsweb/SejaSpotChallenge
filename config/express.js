@@ -1,4 +1,5 @@
 var express = require('express');
+var validator = require('express-validator');
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
@@ -8,6 +9,7 @@ module.exports = function(){
 	app.set('view engine', 'jade');
 	app.set('views', './views');
 	app.use(express.static('./public'));
+	app.use(validator());
 	app.use(bodyParser.json());
 	app.use(bodyParser.urlencoded({ extended: true }));
 	app.use(cookieParser('keyboard cat'));
