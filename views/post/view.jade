@@ -1,0 +1,14 @@
+extends ../layout
+block content
+	div(class="col-md-12")
+		div(class="col-md-10")
+			div(class="card")
+				div(class="card-block")
+					h1(class="card-title") #{title}
+					p(class="card-text") #{post[0].post_content}
+			a(class="btn btn-danger pull-left" href='/post/remove/#{post[0].post_id}') Apagar
+			&nbsp; &nbsp;
+			a(class="btn btn-primary" href='/post/cadastro/#{post[0].post_id}') Editar
+			&nbsp; &nbsp;
+			a(class="btn btn-success" href='#') Adicionar Categoria
+			
