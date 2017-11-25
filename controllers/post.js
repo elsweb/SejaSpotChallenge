@@ -24,7 +24,7 @@ module.exports = function(app){
 			});			
 		},
 		form: function(req,res){
-			res.render('post/form', {form:'create',post:{}, title : 'Cadastrar Postagem'});
+			res.render('post/form', {form:'create',post:[[]], title : 'Cadastrar Postagem'});
 		},
 		create: function(req,res){
 			var array = req.body;
@@ -37,7 +37,7 @@ module.exports = function(app){
 			if(error){
 				res.format({
 					html: function(){
-						res.status(400).render('post/form',{form:'create' , erroValidator: error, post: array, title : 'Cadastrar Postagem'});
+						res.status(400).render('post/form',{form:'create' , erroValidator: error, post: [array], title : 'Cadastrar Postagem'});
 					},
 					json: function(){
 						res.status(400).json(error);
@@ -52,10 +52,24 @@ module.exports = function(app){
 						res.redirect('/post/consulta');
 					}
 				});	
-			}
-						
+			conn.end();
+			}						
 		},
 		update: function(req,res){
+			var array = req.body;
+			var conn  = require('../config/mysql')();
+			var PostModel  = require('../DAO/Post')();
+			var Post = new PostModel(conn);
+			Post.Update(array ,function(error,results){
+				if(error){
+					console.log(error);
+				}else{
+					res.redirect('/post/consulta');
+					conn.end();
+				}
+			});
+		},
+		view: function(req,res){
 			var id = req.params.id;
 			var array = req.body;
 			var conn  = require('../config/mysql')();
@@ -63,23 +77,12 @@ module.exports = function(app){
 			var Post = new PostModel(conn);
 			Post.Read(id,function(error,results){
 				if (error) {
-					req.flash('erro','Erro ao Listar Postagens' + error);
+					console.log(error);
 				}else{
-					res.render('post/form', {posts: results,form:'update', title : 'Atualizar Postagem'});
-					/*
-					Post.Update(array, function(error, results){
-						if (error) {
-							console.log(error);
-						}else{
-
-						}
-					});
-					*/
-					console.log(results);
+					res.render('post/form', {post: results,form:'update', title : 'Atualizar Postagem'});
+					conn.end();
 				}
-
-			})
-			//res.render('post/cadastro', {title : 'Atualizar Postagem'});
+			})			
 		},
 		delete:function(req,res){
 			var id = req.params.id;
@@ -91,6 +94,7 @@ module.exports = function(app){
 					console.log(error);
 				}else{
 					res.redirect('/post/consulta');
+					conn.end();
 				}
 			});						
 		}				

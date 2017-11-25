@@ -5,5 +5,6 @@ module.exports = function(app){
 	app.route('/post/cadastro').get(post.form);
 	app.route('/post/create').post(post.create);
 	app.route('/post/remove/:id').get(post.delete);
-	app.route('/post/update/:id').get(post.update);
+	app.route('/post/cadastro/:id').get(post.view);
+	app.route('/post/update/').post(post.update);	
 }
