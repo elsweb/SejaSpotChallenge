@@ -2,10 +2,34 @@ module.exports = function(app){
 	var PostControll = {
 		index: function(req,res){
 			res.render('post/index', {title : 'Postagem'});
-		},		
+		},
+		view: function(req,res){
+			var id = req.params.id;
+			var array = req.body;
+			var conn  = require('../config/mysql')();
+			var PostModel  = require('../DAO/Post')();
+			var AuthorModel  = require('../DAO/Author')();
+			var Author = new AuthorModel(conn);
+			var Post = new PostModel(conn);
+			Post.Read(id,function(error,results){
+				if (error) {
+					console.log(error);
+				}else{
+					Author.ListAll(function(error, result){
+						if (error) {
+							console.log(error);
+						}else{
+							res.render('post/view', {post: results, author: result, title : results[0].post_title});
+							conn.end();
+						}
+					});	
+				}
+			})			
+		},	
 		read: function(req,res){
 			var conn  = require('../config/mysql')();
 			var PostModel  = require('../DAO/Post')();
+			var moment = require('moment');
 			var Post = new PostModel(conn);			
 			Post.ListAll(function(error, results){
 				if (error) {
@@ -13,7 +37,7 @@ module.exports = function(app){
 				}else{
 					res.format({
 						html:function(){
-							res.render('post/consulta',{posts: results,title: 'Consultar Postagem'});
+							res.render('post/consulta',{posts: results,title: 'Consultar Postagem',moment:moment});
 						},
 						json:function(){
 							res.json(results);
@@ -24,7 +48,18 @@ module.exports = function(app){
 			});			
 		},
 		form: function(req,res){
-			res.render('post/form', {form:'create',post:[[]], title : 'Cadastrar Postagem'});
+			var conn  = require('../config/mysql')();
+			var AuthorModel  = require('../DAO/Author')();
+			var Author = new AuthorModel(conn);
+			Author.ListAll(function(error, results){
+				if (error) {
+					console.log(error);
+				}else{
+					res.render('post/form', {form:'create',post:[[]], author: results, title : 'Cadastrar Postagem'});
+					conn.end();
+				}
+			});			
+			
 		},
 		create: function(req,res){
 			var array = req.body;
@@ -69,18 +104,26 @@ module.exports = function(app){
 				}
 			});
 		},
-		view: function(req,res){
+		view_form: function(req,res){
 			var id = req.params.id;
 			var array = req.body;
 			var conn  = require('../config/mysql')();
 			var PostModel  = require('../DAO/Post')();
+			var AuthorModel  = require('../DAO/Author')();
+			var Author = new AuthorModel(conn);
 			var Post = new PostModel(conn);
 			Post.Read(id,function(error,results){
 				if (error) {
 					console.log(error);
 				}else{
-					res.render('post/form', {post: results,form:'update', title : 'Atualizar Postagem'});
-					conn.end();
+					Author.ListAll(function(error, result){
+						if (error) {
+							console.log(error);
+						}else{
+							res.render('post/form', {post: results, author: result, form:'update', title : 'Atualizar Postagem'});
+							conn.end();
+						}
+					});	
 				}
 			})			
 		},

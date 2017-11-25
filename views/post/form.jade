@@ -4,11 +4,15 @@ block content
 		form(method='POST' , action='/post/'+ form +'/', role='form')
 			h1(class="post-title") #{title}
 			div(class="form-group")
-				label(for="exampleInputEmail1") Título
+				label(for="Autor") Autor
+				select(class="form-control" name="author_id")
+					option
+					each auth in author
+						option(value=auth.author_id) #{auth.author_name}					
+				label(for="Título") Título
 				input(type="text" class="form-control" name="post_title" value=post[0].post_title placeholder="Escreva um título para a postagem")
-				small(id="title_help" class="form-text text-muted") Escreva um título pequeno e chamativo.
-				input(type="text" class="form-control" name="post_content" value=post[0].post_content placeholder="Escreva sobre o post")
-				small(id="title_help" class="form-text text-muted") Escreva um título pequeno e chamativo.
+				label(for="Postagem") Postagem
+				textarea(class="form-control" name="post_content" placeholder="Escreva sobre o post") #{post[0].post_content}
 				input(type="hidden" name="post_id" value=post[0].post_id)
 			if form === 'create'
 				button(type="submit" class="btn btn-primary pull-right") Cadastrar

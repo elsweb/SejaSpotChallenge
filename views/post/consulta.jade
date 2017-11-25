@@ -8,6 +8,9 @@ block content
 					th ID
 					th Título
 					th Autor
+					th Resumo
+					th Publicado
+					th 
 					th 
 					th 
 			tbody
@@ -15,10 +18,14 @@ block content
 					tr
 						th(scope="row") #{post.post_id}
 						th #{post.post_title}
-						th Emanuel
+						th #{post.author}
+						th(class="small2") #{post.post_content}
+						th #{moment(post.post_date).format('DD/MM/YYYY')}
 						th 
-							a(href='/post/cadastro/#{post.post_id}') Editar
+							a(class="glyphicon glyphicon-eye-open" href='/post/view/#{post.post_id}')
+						th 
+							a(class="glyphicon glyphicon-edit" href='/post/cadastro/#{post.post_id}')
 						th
-							a(href='/post/remove/#{post.post_id}') Apagar
+							a(class="glyphicon glyphicon-trash" href='/post/remove/#{post.post_id}')
 		else
 			p Nenhum registro encontrado
