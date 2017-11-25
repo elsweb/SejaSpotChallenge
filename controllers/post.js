@@ -9,7 +9,7 @@ module.exports = function(app){
 			var Post = new PostModel(conn);			
 			Post.ListAll(function(error, results){
 				if (error) {
-					req.flash('erro','Erro ao Listar Postagens' + error);
+					console.log(error);
 				}else{
 					res.format({
 						html:function(){
