@@ -15,6 +15,9 @@ module.exports = function(app){
 				if (error) {
 					console.log(error);
 				}else{
+					//Count Post Views
+					var count = results[0].post_view == 'NULL' ? 1 : results[0].post_view + 1 ;
+					Post.UpdateView(id,count,function(error,results){});
 					Author.ListAll(function(error, result){
 						if (error) {
 							console.log(error);
@@ -38,12 +41,13 @@ module.exports = function(app){
 					res.format({
 						html:function(){
 							res.render('post/consulta',{posts: results,title: 'Consultar Postagem',moment:moment});
+							conn.end();
 						},
 						json:function(){
 							res.json(results);
+							conn.end();
 						}
-					});					
-					conn.end();
+					});	
 				}							
 			});			
 		},
@@ -58,69 +62,96 @@ module.exports = function(app){
 					res.render('post/form', {form:'create',post:[[]], author: results, title : 'Cadastrar Postagem'});
 					conn.end();
 				}
-			});			
-			
+			});	
 		},
 		create: function(req,res){
 			var array = req.body;
 			var conn  = require('../config/mysql')();
-			var PostModel  = require('../DAO/Post')();
-			var AuthorModel  = require('../DAO/Author')();
-			var Post = new PostModel(conn);
-			var Author = new AuthorModel(conn);		
-			
 			var validatorTitle = req.assert('post_title','Título é Obrigatório').notEmpty();
-			var error = req.validationErrors();
-			if(error){
-				res.format({
-					html: function(){
+			var error_v = req.validationErrors();			
+			res.format({
+				html: function(){
+					if(error_v){
+						var AuthorModel  = require('../DAO/Author')();
+						var Author = new AuthorModel(conn);
 						Author.ListAll(function(error_a, results_a){
 							if (error_a) {
 								console.log(error_a);
 							}else{
-								res.status(400).render('post/form', {form:'create', erroValidator: error, post:[array], author: results_a, title : 'Cadastrar Postagem'});
+								res.status(400).render('post/form', {form:'create', erroValidator: error_v, post:[array], author: results_a, title : 'Cadastrar Postagem'});
+								return;
 								conn.end();
 							}
 						});
-					},
-					json: function(){
-						res.status(400).json(error);
-					}
-				});
-				return;
-			}else{
-				Post.Create(array, function(error, results){
-					if (error) {
-						console.log(error);
+					return;
 					}else{
-						res.redirect('/post/consulta');
+						var PostModel  = require('../DAO/Post')();
+						var Post = new PostModel(conn);
+						Post.Create(array, function(error, results){
+							if (error) {
+								console.log(error);
+							}else{
+								conn.end();
+								res.redirect('/post/consulta');	
+							}
+						});
 					}
-				});	
-			conn.end();
-			}						
+				},
+				json: function(){
+					var PostModel  = require('../DAO/Post')();
+					var Post = new PostModel(conn);
+					Post.Create(array, function(error, results){
+						if (error) {
+							res.status(400).json(error);
+						}else{
+							res.status(200).json('Cadastrado com Sucesso');
+							conn.end();
+						}
+					});
+				}
+			});									
 		},
 		update: function(req,res){
 			var array = req.body;
-			var conn  = require('../config/mysql')();
-			var PostModel  = require('../DAO/Post')();
-			var Post = new PostModel(conn);
-			Post.Update(array ,function(error,results){
-				if(error){
-					console.log(error);
-				}else{
-					res.redirect('/post/consulta');
-					conn.end();
-				}
-			});
+			var validatorTitle = req.assert('post_title','Título é Obrigatório').notEmpty();
+			var error_v = req.validationErrors();
+			if(error_v){
+				var conn  = require('../config/mysql')();
+				var PostModel  = require('../DAO/Post')();
+				var Post = new PostModel(conn);
+				var AuthorModel  = require('../DAO/Author')();
+				var Author = new AuthorModel(conn);
+				Author.ListAll(function(error_a, result_a){
+					if (error_a) {
+						console.log(error_a);
+					}else{
+						console.log(error_v);
+						res.render('post/form', {post: [array], author: result_a, erroValidator: error_v, form:'update', title : 'Atualizar Postagem'});
+						conn.end();								
+					}
+				});
+			}else{
+				var conn  = require('../config/mysql')();
+				var PostModel  = require('../DAO/Post')();
+				var Post = new PostModel(conn);
+				Post.Update(array ,function(error,results){
+					if(error){
+						console.log(error);
+					}else{
+						conn.end();
+						res.redirect('/post/consulta');						
+					}
+				});
+			}
 		},
 		view_form: function(req,res){
 			var id = req.params.id;
-			var array = req.body;
 			var conn  = require('../config/mysql')();
 			var PostModel  = require('../DAO/Post')();
+			var Post = new PostModel(conn);
 			var AuthorModel  = require('../DAO/Author')();
 			var Author = new AuthorModel(conn);
-			var Post = new PostModel(conn);
+
 			Post.Read(id,function(error,results){
 				if (error) {
 					console.log(error);
@@ -145,8 +176,8 @@ module.exports = function(app){
 				if (error) {
 					console.log(error);
 				}else{
-					res.redirect('/post/consulta');
 					conn.end();
+					res.redirect('/post/consulta');					
 				}
 			});						
 		}				

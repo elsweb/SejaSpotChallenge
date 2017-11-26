@@ -36,39 +36,45 @@ module.exports = function(app){
 		},
 		create: function(req,res){
 			var array = req.body;
-			var conn  = require('../config/mysql')();
-			var AuthorModel  = require('../DAO/Author')();
-			var Author = new AuthorModel(conn);			
-			
-			var validatorTitle = req.assert('author_name','Nome é Obrigatório').notEmpty();
-			var error = req.validationErrors();
-			if(error){
-					res.render('author/form',{form:'create',author:[array] , erroValidator: error, title : 'Cadastrar Autor'});
+			var validatorTitle = req.assert('author_name','Título é Obrigatório').notEmpty();
+			var error_v = req.validationErrors();
+				if(error_v){
+					res.render('author/form',{form:'create',author:[array] , erroValidator: error_v, title : 'Cadastrar Autor'});
 				return;
-			}else{
-				Author.Create(array, function(error, results){
-					if (error) {
-						console.log(error);
-					}else{
-						res.redirect('/author/consulta');
-					}
-				});	
-			conn.end();
-			}						
+				}else{
+					var conn  = require('../config/mysql')();
+					var AuthorModel  = require('../DAO/Author')();
+					var Author = new AuthorModel(conn);	
+					Author.Create(array, function(error, results){
+						if (error) {
+							console.log(error);
+						}else{
+							conn.end();
+							res.redirect('/author/consulta');
+						}
+					});
+				}			
 		},
 		update: function(req,res){
 			var array = req.body;
-			var conn  = require('../config/mysql')();
-			var AuthorModel  = require('../DAO/Author')();
-			var Author = new AuthorModel(conn);	
-			Author.Update(array ,function(error,results){
-				if(error){
-					console.log(error);
-				}else{
-					res.redirect('/author/consulta');
-					conn.end();
-				}
-			});
+			var validatorTitle = req.assert('author_name','Título é Obrigatório').notEmpty();
+			var error_v = req.validationErrors();
+			if(error_v){
+				res.render('author/form', {author: [array], form:'update', erroValidator: error_v, title : 'Atualizar Postagem'});
+			}else{
+				var conn  = require('../config/mysql')();
+				var AuthorModel  = require('../DAO/Author')();
+				var Author = new AuthorModel(conn);	
+				Author.Update(array ,function(error,results){
+						if(error){
+							console.log(error);
+						}else{
+							conn.end();
+							res.redirect('/author/consulta');					
+						}
+					});
+			}
+			
 		},
 		view_form: function(req,res){
 			var id = req.params.id;
@@ -93,8 +99,8 @@ module.exports = function(app){
 				if (error) {
 					console.log(error);
 				}else{
-					res.redirect('/author/consulta');
 					conn.end();
+					res.redirect('/author/consulta');					
 				}
 			});						
 		}				

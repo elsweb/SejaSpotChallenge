@@ -46,46 +46,65 @@ module.exports = function(app){
 		},
 		create: function(req,res){
 			var array = req.body;
-			var conn  = require('../config/mysql')();
-			var CategoryModel  = require('../DAO/Category')();
-			var Category = new CategoryModel(conn);			
-			
 			var validatorTitle = req.assert('category_name','Nome é Obrigatório').notEmpty();
-			var error = req.validationErrors();
-			if(error){
-				Category.ListSub(function(error_s, results){
-					if (error_s) {
-						console.log(error_s);
+			var error_v = req.validationErrors();
+			if(error_v){
+				var conn  = require('../config/mysql')();
+				var CategoryModel  = require('../DAO/Category')();
+				var Category = new CategoryModel(conn);			
+				Category.ListSub(function(error, results){
+					if (error) {
+						console.log(error);
 					}else{
-						res.render('category/form', {form:'create',category:[array], sub_cat: results, erroValidator: error, title : 'Cadastrar Categoria'});
+						res.render('category/form', {form:'create',erroValidator: error_v,category:[array], sub_cat: results, title : 'Cadastrar Categoria'});
 						conn.end();
 					}							
 				});
-				return;
+			return;
 			}else{
+				var conn  = require('../config/mysql')();
+				var CategoryModel  = require('../DAO/Category')();
+				var Category = new CategoryModel(conn);
 				Category.Create(array, function(error, results){
 					if (error) {
 						console.log(error);
 					}else{
+						conn.end();
 						res.redirect('/category/consulta');
 					}
 				});	
-			conn.end();
 			}						
 		},
 		update: function(req,res){
 			var array = req.body;
-			var conn  = require('../config/mysql')();
-			var CategoryModel  = require('../DAO/Category')();
-			var Category = new CategoryModel(conn);	
-			Category.Update(array ,function(error,results){
-				if(error){
-					console.log(error);
-				}else{
-					res.redirect('/category/consulta');
-					conn.end();
-				}
-			});
+			var validatorTitle = req.assert('category_name','Nome é Obrigatório').notEmpty();
+			var error_v = req.validationErrors();
+			if(error_v){
+				var conn  = require('../config/mysql')();
+				var CategoryModel  = require('../DAO/Category')();
+				var Category = new CategoryModel(conn);
+				Category.ListSub(function(error, results){
+					if (error) {
+						console.log(error);
+					}else{
+						res.render('category/form', {form:'create',erroValidator: error_v,category:[array], sub_cat: results, title : 'Atualizar Categoria'});
+						conn.end();
+					}							
+				});
+			return;
+			}else{
+				var conn  = require('../config/mysql')();
+				var CategoryModel  = require('../DAO/Category')();
+				var Category = new CategoryModel(conn);	
+					Category.Update(array ,function(error,results){
+						if(error){
+							console.log(error);
+						}else{
+							conn.end();
+							res.redirect('/category/consulta');					
+						}
+					});
+			}			
 		},
 		view_form: function(req,res){
 			var id = req.params.id;
@@ -116,8 +135,8 @@ module.exports = function(app){
 				if (error) {
 					console.log(error);
 				}else{
-					res.redirect('/category/consulta');
 					conn.end();
+					res.redirect('/category/consulta');					
 				}
 			});						
 		}				
