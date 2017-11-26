@@ -43,7 +43,7 @@ module.exports = function(app){
 			var validatorTitle = req.assert('author_name','Nome é Obrigatório').notEmpty();
 			var error = req.validationErrors();
 			if(error){
-					res.render('author/form',{form:'create' , erroValidator: error, title : 'Cadastrar Autor'});
+					res.render('author/form',{form:'create',author:[array] , erroValidator: error, title : 'Cadastrar Autor'});
 				return;
 			}else{
 				Author.Create(array, function(error, results){

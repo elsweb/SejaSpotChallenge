@@ -65,14 +65,23 @@ module.exports = function(app){
 			var array = req.body;
 			var conn  = require('../config/mysql')();
 			var PostModel  = require('../DAO/Post')();
-			var Post = new PostModel(conn);			
+			var AuthorModel  = require('../DAO/Author')();
+			var Post = new PostModel(conn);
+			var Author = new AuthorModel(conn);		
 			
 			var validatorTitle = req.assert('post_title','Título é Obrigatório').notEmpty();
 			var error = req.validationErrors();
 			if(error){
 				res.format({
 					html: function(){
-						res.status(400).render('post/form',{form:'create' , erroValidator: error, post: [array], title : 'Cadastrar Postagem'});
+						Author.ListAll(function(error_a, results_a){
+							if (error_a) {
+								console.log(error_a);
+							}else{
+								res.status(400).render('post/form', {form:'create', erroValidator: error, post:[array], author: results_a, title : 'Cadastrar Postagem'});
+								conn.end();
+							}
+						});
 					},
 					json: function(){
 						res.status(400).json(error);
