@@ -26,8 +26,16 @@ module.exports = function(app){
 				if (error) {
 					console.log(error);
 				}else{
-					res.render('category/consulta',{categorys: results,title: 'Consultar Categoria'});				
-					conn.end();
+					res.format({
+						html:function(){
+							res.render('category/consulta',{categorys: results,title: 'Consultar Categoria'});				
+							conn.end();
+						},
+						json:function(){
+							res.json(results);
+							conn.end();
+						}
+					});
 				}							
 			});			
 		},
