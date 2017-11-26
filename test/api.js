@@ -4,9 +4,7 @@ load('controllers').then('DAO').then('routes').into(app);
 var request = require('supertest')(app);
 var DatabaseCleaner = require('database-cleaner');
 var databaseCleaner = new DatabaseCleaner('mysql');
-
-
-describe('#PostControll',function(){	
+describe('API Tester',function(){	
 	beforeEach(function(done){
 		var conn  = require('../config/mysql')();
 		databaseCleaner.clean(conn, function(err,result){
@@ -21,20 +19,16 @@ describe('#PostControll',function(){
         .expect('Content-Type', /json/)
 		.expect(200,done);
 	});
-	it('Invalid registration',function(done){
-		request.post('/post/create')
-		.send({
-			post_title : '', 
-			post_content : 'Insert for API Example'
-		})
-		.expect(400,done);
+	it('Listing of author',function(done){
+		request.get('/author/consulta')
+		.set('Accept', 'application/json')
+        .expect('Content-Type', /json/)
+		.expect(200,done);
 	});
-	it('Valid registration',function(done){
-		request.post('/post/create')
-		.send({
-			post_title : 'API Example', 
-			post_content : 'Insert for API Example'
-		})
-		.expect(302,done);
-	});	
+	it('Listing of category',function(done){
+		request.get('/category/consulta')
+		.set('Accept', 'application/json')
+        .expect('Content-Type', /json/)
+		.expect(200,done);
+	});
 });
