@@ -19,6 +19,7 @@ var client = http.request(config,function(res){
 });
 
 var post = {
+  author_id : 1,//author ID
   post_title : 'API Example',
   post_content : 'Insert for API Example'
 }
