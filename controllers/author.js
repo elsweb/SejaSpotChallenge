@@ -26,8 +26,16 @@ module.exports = function(app){
 				if (error) {
 					console.log(error);
 				}else{
-					res.render('author/consulta',{authors: results,title: 'Consultar Autor'});				
-					conn.end();
+					res.format({
+						html:function(){
+							res.render('author/consulta',{authors: results,title: 'Consultar Autor'});				
+							conn.end();
+						},
+						json:function(){
+							res.json(results);
+							conn.end();
+						}
+					});	
 				}							
 			});			
 		},
