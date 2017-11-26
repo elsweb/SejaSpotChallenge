@@ -10,6 +10,7 @@ block content
 					th Autor
 					th Resumo
 					th Publicado
+					th Acessado
 					th 
 					th 
 					th 
@@ -21,6 +22,10 @@ block content
 						th #{post.author}
 						th(class="small2") #{post.post_content}
 						th #{moment(post.post_date).format('DD/MM/YYYY')}
+						if post.post_view
+							th(class="text-center") #{post.post_view}
+						else 
+							th(class="text-center") 0
 						th 
 							a(class="glyphicon glyphicon-eye-open" href='/post/view/#{post.post_id}')
 						th 
