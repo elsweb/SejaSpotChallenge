@@ -7,8 +7,9 @@ block content
 				label(for="Autor") Autor
 				select(class="form-control" name="author_id")
 					option
-					each auth in author
-						option(value=auth.author_id) #{auth.author_name}					
+					if author.length > 0
+						each auth in author
+							option(value=auth.author_id) #{auth.author_name}					
 				label(for="Título") Título
 				input(type="text" class="form-control" name="post_title" value=post[0].post_title placeholder="Escreva um título para a postagem")
 				label(for="Postagem") Postagem
