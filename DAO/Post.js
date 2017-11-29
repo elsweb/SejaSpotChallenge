@@ -57,8 +57,21 @@ PostDAO.prototype.CheckCat = function(array, callback){
 		  'WHERE category_id = '+ array.category_id + ' AND post_id = ' + array.post_id
 	this._conn.query(sql,callback);
 }
-PostDAO.prototype.Read = function(id,callback){
+PostDAO.prototype.Read = function(id,callback){	
 	this._conn.query('SELECT * FROM '+ this._table +' WHERE post_id = ?', id, callback);
+}
+PostDAO.prototype.ReadPostAuthor = function(id,callback){
+	sql = 'SELECT p.post_id as post_id,'+
+	      'p.author_id as author_id,'+
+	      'p.post_title as post_title,'+
+	      'p.post_content as post_content,'+
+	      'p.post_date as post_date,'+
+	      'p.post_view as post_view,'+
+	      'a.author_name as author_name, '+
+	      'a.author_id as author_id '+
+	      'FROM post as p, author as a '+
+	      'WHERE p.author_id = a.author_id AND p.post_id = ?';
+	this._conn.query(sql,id,callback);
 }
 PostDAO.prototype.Update = function(array,callback){	
 	this._conn.query('UPDATE '+ this._table +' SET ? WHERE post_id = ? ', [{

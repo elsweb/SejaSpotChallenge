@@ -119,7 +119,7 @@ module.exports = function(app){
 			var conn  = require('../config/mysql')();
 			var CategoryModel  = require('../DAO/Category')();
 			var Category = new CategoryModel(conn);	
-			Category.Read(id,function(error,results_a){
+			Category.ReadCatSubCat(id,function(error,results_a){
 				if (error) {
 					console.log(error);
 				}else{

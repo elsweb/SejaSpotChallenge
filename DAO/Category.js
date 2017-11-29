@@ -21,6 +21,17 @@ CategoryDAO.prototype.Create = function(array,callback){
 CategoryDAO.prototype.Read = function(id,callback){
 	this._conn.query('SELECT * FROM '+ this._table +' WHERE category_id = ?', id, callback);
 }
+CategoryDAO.prototype.ReadCatSubCat = function(id,callback){
+	var sql = 'SELECT c.category_id as category_id,'+
+			   'c.sub_id as sub_id,'+
+			   'c.category_name as category_name,'+
+			   'c.category_desc as category_desc,'+
+			   'sb.sub_id as sub_id,'+
+			   'sb.sub_name as sub_name '+
+			   'FROM '+this._table+' as c, sub_category as sb '+
+			   'WHERE c.sub_id = sb.sub_id AND category_id = ?';
+		this._conn.query(sql,id,callback);
+}
 CategoryDAO.prototype.Update = function(array,callback){	
 	this._conn.query('UPDATE '+ this._table +' SET ? WHERE category_id = ? ', [{
 	  	sub_id: array.sub_id,

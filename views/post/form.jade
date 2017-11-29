@@ -10,7 +10,10 @@ block content
 						option
 						if author.length > 0
 							each auth in author
-								option(value=auth.author_id) #{auth.author_name}					
+								if form == 'update'
+									option(value=(post[0].author_id == auth.author_id ? post[0].author_id : auth.author_id) selected=(post[0].author_name.toString() == auth.author_name ? 'selected' : false)) #{auth.author_name}
+								else
+									option(value=auth.author_id) #{auth.author_name}
 					label(for="Título") Título
 					input(type="text" class="form-control" name="post_title" value=post[0].post_title placeholder="Escreva um título para a postagem")
 					label(for="Postagem") Postagem

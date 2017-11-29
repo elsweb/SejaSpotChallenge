@@ -267,7 +267,7 @@ module.exports = function(app){
 			var AuthorModel  = require('../DAO/Author')();
 			var Author = new AuthorModel(conn);
 
-			Post.Read(id,function(error,results){
+			Post.ReadPostAuthor(id,function(error,results){
 				if (error) {
 					console.log(error);
 				}else{
@@ -275,6 +275,7 @@ module.exports = function(app){
 						if (error) {
 							console.log(error);
 						}else{
+							console.log(results);
 							res.render('post/form', {post: results, author: result, form:'update', title : 'Atualizar Postagem'});
 							conn.end();
 						}

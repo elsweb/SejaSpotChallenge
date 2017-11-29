@@ -12,7 +12,10 @@ block content
 						option
 						if sub_cat.length > 0
 							each scat in sub_cat
-								option(value=scat.sub_id) #{scat.sub_name}
+								if form == 'update'
+									option(value=(category[0].sub_id == scat.sub_id ? category[0].sub_id : scat.sub_id) selected=(category[0].sub_name.toString() == scat.sub_name ? 'selected' : false)) #{scat.sub_name}
+								else
+									option(value=scat.sub_id) #{scat.sub_name}
 					label(for="Postagem") Descrição
 					textarea(class="form-control" name="category_desc" placeholder="Escreva sobre a categoria") #{category[0].category_desc}
 					input(type="hidden" name="category_id" value=category[0].category_id)
