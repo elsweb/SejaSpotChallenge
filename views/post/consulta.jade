@@ -4,21 +4,26 @@ block content
 		div(class='col-md-6')
 			form(class='form-inline' action='/post/consulta' method='GET' , role='form')
 				div(class='form-group')
-					label(for="Categoria") Autor &nbsp; &nbsp;
-					select(class='form-control' name='filter_author')
-						option
-						if author.length > 0
-							each ath in author
-								option(value='#{ath.author_id}') #{ath.author_name}
+					if author.length > 0
+						label(for="Categoria") Autor &nbsp; &nbsp;
+						select(class='form-control' name='filter_author')
+							option
+								each ath in author
+									option(value='#{ath.author_id}') #{ath.author_name}
+					else
+						a(href="/author/cadastro" class='btn btn-success') Cadastrar Autor
 					&nbsp; &nbsp;
-					label(for="Categoria") Categoria &nbsp; &nbsp;
-					select(class='form-control' name='filter_category')
-						option
-						if cat.length > 0
-							each cats in cat
-								option(value='#{cats.category_id}') #{cats.category_name}
+					if cat.length > 0
+						label(for="Categoria") Categoria &nbsp; &nbsp;
+						select(class='form-control' name='filter_category')
+							option
+								each cats in cat
+									option(value='#{cats.category_id}') #{cats.category_name}
+					else
+						a(href="/category/cadastro" class='btn btn-success') Cadastrar Categoria
 					&nbsp; &nbsp;
-					input(type='submit' value='Enviar' class='btn btn-success')
+					if author.length > 0 || cat.length > 0
+						input(type='submit' value='Enviar' class='btn btn-success')
 	table(class="table table-responsive")
 		h1(class="post-title") #{title}
 		if posts.length > 0
