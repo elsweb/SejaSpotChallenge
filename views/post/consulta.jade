@@ -56,5 +56,15 @@ block content
 							a(class="glyphicon glyphicon-edit" href='/post/cadastro/#{post.post_id}')
 						th
 							a(class="glyphicon glyphicon-trash" href='/post/remove/#{post.post_id}')
+			div(class='col-md-12 text-center')
+				if pg != 0
+					a(class="glyphicon glyphicon-chevron-left" href='?page=#{pg-1}')
+				a(class="glyphicon glyphicon-chevron-right" href='?page=#{pg+1}')
+			br
+			br
 		else
-			p(class='alert alert-info text-center') Nenhum registro encontrado
+			div(class='col-md-12 text-center')
+				a(class="glyphicon glyphicon-chevron-left" href='?page=#{pg-1}')
+				br
+				br
+				p(class='alert alert-info text-center') Nenhum registro encontrado

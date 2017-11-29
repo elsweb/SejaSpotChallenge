@@ -128,43 +128,70 @@ module.exports = function(app){
 		},
 		read: function(req,res){
 			var qurl = require('url').parse(req.url,true).query;
+			var Promise = require('bluebird');
 			var conn  = require('../config/mysql')();
 			var PostModel  = require('../DAO/Post')();
 			var moment = require('moment');
 			var Post = new PostModel(conn);
-			Post.ListAll(qurl,function(error_p, results_p){
-				if (error_p) {
-					console.log(error_p);
+			//Pagination vars
+			var queryPagination;
+ 			var numPerPage = parseInt(req.query.npp, 10) || 3;
+  			var page = parseInt(req.query.page, 10) || 0;
+  			var numPages;
+  			var skip = page * numPerPage;
+  			var end_limit = numPerPage;
+ 			var limit = skip + ',' + end_limit;
+  			Post.Count(function(error_count, results_count){
+				if(error_count){
+					console.log(error_count);
 				}else{
-					res.format({
-						html:function(){
-							var AuthorModel = require('../DAO/Author')();
-							var Author = new AuthorModel(conn);
-							Author.ListAll(function(error_a, results_a){
-								if(error_a){
-									console.log(results_a);
-								}else{
-									var CategoryModel = require('../DAO/Category')();
-									var Category = new CategoryModel(conn);
-									Category.ListAll(function(error_cat,results_cat){
-										if(error_cat){
-											console.log(error_cat);
+				  numPages = Math.ceil(results_count[0].Rows / numPerPage);
+				  Post.ListAll(qurl,limit,function(error_p, results_p){
+				  		if(error_p){
+				  			console.log(error_p);
+				  		}else{
+				  			var responsePayload = {results: results_p};
+				  			if (page < numPages) {
+        						responsePayload.pagination = {
+        						current: page,
+        						perPage: numPerPage,
+        						previous: page > 0 ? page - 1 : undefined,
+        						next: page < numPages - 1 ? page + 1 : undefined
+      							}
+   							 }else responsePayload.pagination = {
+        						err: 'O número máximo e páginas são ' + numPages
+      						}
+      						res.format({
+								html:function(){
+									var AuthorModel = require('../DAO/Author')();
+									var Author = new AuthorModel(conn);
+									Author.ListAll(function(error_a, results_a){
+										if(error_a){
+											console.log(results_a);
 										}else{
-											res.render('post/consulta',{posts: results_p,author: results_a , cat: results_cat, title: 'Consultar Postagem',moment:moment});
-											conn.end();	
+											var CategoryModel = require('../DAO/Category')();
+											var Category = new CategoryModel(conn);
+											Category.ListAll(function(error_cat,results_cat){
+												if(error_cat){
+													console.log(error_cat);
+												}else{
+													res.render('post/consulta',{posts:results_p,author:results_a , cat:results_cat, pg:page, title:'Consultar Postagem',moment:moment});
+													conn.end();	
+												}
+											})
 										}
-									})
+										
+									});
+								},
+								json:function(){
+									res.json(results_p);
+									conn.end();
 								}
-								
-							});
-						},
-						json:function(){
-							res.json(results_p);
-							conn.end();
-						}
-					});	
-				}							
-			});			
+							});	
+				  		}
+				  })
+				}
+			})	
 		},
 		form: function(req,res){
 			var conn  = require('../config/mysql')();
