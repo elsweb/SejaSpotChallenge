@@ -81,7 +81,8 @@ module.exports = function(app){
 			var conn  = require('../config/mysql')();
 			var PostModel  = require('../DAO/Post')();
 			var Post = new PostModel(conn);
-			Post.CheckCat(array.category_id,function(error,results){
+			console.log(array);
+			Post.CheckCat(array,function(error,results){
 				if(results[0].count_cat == 0){
 					Post.AddCat(array,function(error,results){
 						if(error){
@@ -126,21 +127,39 @@ module.exports = function(app){
 			})			
 		},
 		read: function(req,res){
+			var qurl = require('url').parse(req.url,true).query;
 			var conn  = require('../config/mysql')();
 			var PostModel  = require('../DAO/Post')();
 			var moment = require('moment');
-			var Post = new PostModel(conn);			
-			Post.ListAll(function(error, results){
-				if (error) {
-					console.log(error);
+			var Post = new PostModel(conn);
+			Post.ListAll(qurl,function(error_p, results_p){
+				if (error_p) {
+					console.log(error_p);
 				}else{
 					res.format({
 						html:function(){
-							res.render('post/consulta',{posts: results,title: 'Consultar Postagem',moment:moment});
-							conn.end();
+							var AuthorModel = require('../DAO/Author')();
+							var Author = new AuthorModel(conn);
+							Author.ListAll(function(error_a, results_a){
+								if(error_a){
+									console.log(results_a);
+								}else{
+									var CategoryModel = require('../DAO/Category')();
+									var Category = new CategoryModel(conn);
+									Category.ListAll(function(error_cat,results_cat){
+										if(error_cat){
+											console.log(error_cat);
+										}else{
+											res.render('post/consulta',{posts: results_p,author: results_a , cat: results_cat, title: 'Consultar Postagem',moment:moment});
+											conn.end();	
+										}
+									})
+								}
+								
+							});
 						},
 						json:function(){
-							res.json(results);
+							res.json(results_p);
 							conn.end();
 						}
 					});	

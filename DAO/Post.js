@@ -2,8 +2,28 @@ function PostDAO(conn){
 	this._table = 'post';
 	this._conn = conn;
 }
-PostDAO.prototype.ListAll = function(callback){
-	sql = 'SELECT p.post_id as post_id, p.post_title as post_title,p.post_content as post_content,p.post_date as post_date,p.post_view as post_view, a.author_name as author FROM '+this._table+' as p, author as a WHERE p.author_id = a.author_id';
+PostDAO.prototype.ListAll = function(qurl,callback){
+	var author = '';
+	var category = '';
+	var from_post_cat = '';
+	var and_post_cat = '';
+	if(Object.keys(qurl).length > 0){
+		author   = qurl.filter_author == '' ? '' : ' AND p.author_id = '+ qurl.filter_author +' ';
+		
+		if(!qurl.filter_category == ''){
+			from_post_cat = ', post_cat as pc'
+			and_post_cat = 'AND p.post_id = pc.post_id';
+			category = qurl.filter_category == '' ? '' : ' AND pc.category_id = ' + qurl.filter_category;
+		}
+	}
+	var sql = 'SELECT DISTINCT p.post_id as post_id, '+
+					  'p.post_title as post_title,'+
+					  'p.post_content as post_content,'+
+					  'p.post_date as post_date,'+
+					  'p.post_view as post_view,'+
+					  'a.author_name as author '+
+					  'FROM '+this._table+' as p, author as a ' + from_post_cat +' '+
+					  'WHERE p.author_id = a.author_id ' + and_post_cat + author + category;
 	this._conn.query(sql,callback);
 }
 PostDAO.prototype.Create = function(array,callback){
@@ -31,8 +51,10 @@ PostDAO.prototype.AddCat = function(array,callback){
 	  ]];
 	this._conn.query(sql,[values],callback);	
 }
-PostDAO.prototype.CheckCat = function(cat_id, callback){
-	sql = 'SELECT COUNT(category_id) as count_cat FROM post_cat WHERE category_id = '+ cat_id
+PostDAO.prototype.CheckCat = function(array, callback){
+	sql = 'SELECT COUNT(category_id) as count_cat '+
+		  'FROM post_cat '+ 
+		  'WHERE category_id = '+ array.category_id + ' AND post_id = ' + array.post_id
 	this._conn.query(sql,callback);
 }
 PostDAO.prototype.Read = function(id,callback){

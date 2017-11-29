@@ -1,16 +1,24 @@
 extends ../layout
 block content
 	div(class='row')
-		div(class='col-md-4')
-			form(class='form-inline' action='' method='GET' , role='form')
+		div(class='col-md-6')
+			form(class='form-inline' action='/post/consulta' method='GET' , role='form')
 				div(class='form-group')
 					label(for="Categoria") Autor &nbsp; &nbsp;
-					select(class='form-control' name='category_id')
+					select(class='form-control' name='filter_author')
 						option
+						if author.length > 0
+							each ath in author
+								option(value='#{ath.author_id}') #{ath.author_name}
 					&nbsp; &nbsp;
 					label(for="Categoria") Categoria &nbsp; &nbsp;
-					select(class='form-control' name='category_id')
+					select(class='form-control' name='filter_category')
 						option
+						if cat.length > 0
+							each cats in cat
+								option(value='#{cats.category_id}') #{cats.category_name}
+					&nbsp; &nbsp;
+					input(type='submit' value='Enviar' class='btn btn-success')
 	table(class="table table-responsive")
 		h1(class="post-title") #{title}
 		if posts.length > 0
