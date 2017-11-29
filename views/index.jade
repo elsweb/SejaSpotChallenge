@@ -1,5 +1,8 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
+  div(class="jumbotron")
+   h1(class="text-center") #{title}
+   p(class="lead text-center") Ofereça aos seus clientes, conteúdo atualizado.
+   p(class="text-center")
+    a(class="btn btn-lg btn-success" href="/post/cadastro" role="button") Cadastre Aqui
