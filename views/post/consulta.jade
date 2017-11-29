@@ -1,5 +1,16 @@
 extends ../layout
 block content
+	div(class='row')
+		div(class='col-md-4')
+			form(class='form-inline' action='' method='GET' , role='form')
+				div(class='form-group')
+					label(for="Categoria") Autor &nbsp; &nbsp;
+					select(class='form-control' name='category_id')
+						option
+					&nbsp; &nbsp;
+					label(for="Categoria") Categoria &nbsp; &nbsp;
+					select(class='form-control' name='category_id')
+						option
 	table(class="table table-responsive")
 		h1(class="post-title") #{title}
 		if posts.length > 0
@@ -33,4 +44,4 @@ block content
 						th
 							a(class="glyphicon glyphicon-trash" href='/post/remove/#{post.post_id}')
 		else
-			p Nenhum registro encontrado
+			p(class='alert alert-info text-center') Nenhum registro encontrado

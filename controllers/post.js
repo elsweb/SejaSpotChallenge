@@ -9,26 +9,122 @@ module.exports = function(app){
 			var conn  = require('../config/mysql')();
 			var PostModel  = require('../DAO/Post')();
 			var AuthorModel  = require('../DAO/Author')();
+			var CategoryModel  = require('../DAO/Category')();
 			var Author = new AuthorModel(conn);
 			var Post = new PostModel(conn);
-			Post.Read(id,function(error,results){
-				if (error) {
-					console.log(error);
+			var Category = new CategoryModel(conn);
+			Post.Read(id,function(error_p,results_p){
+				if (error_p) {
+					console.log(error_p);
 				}else{
 					//Count Post Views
-					var count = results[0].post_view == 'NULL' ? 1 : results[0].post_view + 1 ;
-					Post.UpdateView(id,count,function(error,results){});
-					Author.ListAll(function(error, result){
-						if (error) {
-							console.log(error);
+					var count = results_p[0].post_view == 'NULL' ? 1 : results_p[0].post_view + 1 ;
+					Post.UpdateView(id,count,function(error_c,results_c){});
+					Author.ListAll(function(error_a, result_a){
+						if (error_a) {
+							console.log(error_a);
 						}else{
-							res.render('post/view', {post: results, author: result, title : results[0].post_title});
-							conn.end();
+							//List Category
+							Category.ListAll(function(error_cat, results_cat){
+								if (error_cat){
+									console.log(error_cat);
+								}else{
+									Post.ListCat(id,function(error_pc,results_pc){
+									res.render('post/view', {post: results_p, author: result_a, cat: results_cat, p_cat:results_pc ,title : results_p[0].post_title});
+									conn.end();
+								});
+								}
+							});						
 						}
 					});	
 				}
 			})			
-		},	
+		},
+		view_rtn: function(req,res){
+			var id = req.params.id;
+			var array = req.body;
+			var conn  = require('../config/mysql')();
+			var PostModel  = require('../DAO/Post')();
+			var AuthorModel  = require('../DAO/Author')();
+			var CategoryModel  = require('../DAO/Category')();
+			var Author = new AuthorModel(conn);
+			var Post = new PostModel(conn);
+			var Category = new CategoryModel(conn);
+			Post.Read(id,function(error_p,results_p){
+				if (error_p) {
+					console.log(error_p);
+				}else{
+					//Count Post Views
+					Author.ListAll(function(error_a, result_a){
+						if (error_a) {
+							console.log(error_a);
+						}else{
+							//List Category
+							Category.ListAll(function(error_cat, results_cat){
+								if (error_cat){
+									console.log(error_cat);
+								}else{
+									Post.ListCat(id,function(error_pc,results_pc){
+									res.render('post/view', {post: results_p, author: result_a, cat: results_cat, p_cat:results_pc ,title : results_p[0].post_title});
+									conn.end();
+								});
+								}
+							});							
+						}
+					});	
+				}
+			})
+
+		},
+		cat_add: function(req,res){
+			var array = req.body;
+			var conn  = require('../config/mysql')();
+			var PostModel  = require('../DAO/Post')();
+			var Post = new PostModel(conn);
+			Post.CheckCat(array.category_id,function(error,results){
+				if(results[0].count_cat == 0){
+					Post.AddCat(array,function(error,results){
+						if(error){
+							console.log(error);
+						}else{
+							res.redirect('/post/view_rtn/'+array.post_id);
+							conn.end();
+							return;
+						}								
+				})
+				}else{
+					var msg = 'Categoria já cadastrada';
+					var AuthorModel  = require('../DAO/Author')();
+					var CategoryModel  = require('../DAO/Category')();
+					var Author = new AuthorModel(conn);
+					var Category = new CategoryModel(conn);
+					Post.Read(array.post_id,function(error_p,results_p){
+					if (error_p) {
+						console.log(error_p);
+					}else{
+						//Count Post Views
+						Author.ListAll(function(error_a, result_a){
+							if (error_a) {
+								console.log(error_a);
+							}else{
+								//List Category
+								Category.ListAll(function(error_cat, results_cat){
+									if (error_cat){
+										console.log(error_cat);
+									}else{
+										Post.ListCat(array.post_id,function(error_pc,results_pc){
+										res.render('post/view', {post: results_p, author: result_a, cat: results_cat, p_cat:results_pc,msg:msg ,title : results_p[0].post_title});
+										conn.end();
+									});
+									}
+								});							
+							}
+						});	
+					}
+				})
+				}
+			})			
+		},
 		read: function(req,res){
 			var conn  = require('../config/mysql')();
 			var PostModel  = require('../DAO/Post')();

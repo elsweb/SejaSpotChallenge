@@ -15,6 +15,26 @@ PostDAO.prototype.Create = function(array,callback){
 	  ]];
 	this._conn.query(sql,[values],callback);
 }
+PostDAO.prototype.ListCat = function(id,callback){
+	if(id){
+		sql = 'SELECT p.post_cat_id as post_cat_id, p.post_id as post_id, p.category_id as category_id, a.category_name as category_name FROM post_cat as p, category as a WHERE p.category_id =  a.category_id AND p.post_id = '+id+' '
+	}else{
+		sql = 'SELECT p.post_cat_id as post_cat_id, p.post_id as post_id, p.category_id as category_id, a.category_name as category_name FROM post_cat as p, category as a WHERE p.category_id =  a.category_id '
+	}
+	this._conn.query(sql,callback);
+}
+PostDAO.prototype.AddCat = function(array,callback){
+	var sql = 'INSERT INTO post_cat (post_id, category_id) VALUES ?';
+	var values = [[
+	  array.post_id,
+	  array.category_id,	   
+	  ]];
+	this._conn.query(sql,[values],callback);	
+}
+PostDAO.prototype.CheckCat = function(cat_id, callback){
+	sql = 'SELECT COUNT(category_id) as count_cat FROM post_cat WHERE category_id = '+ cat_id
+	this._conn.query(sql,callback);
+}
 PostDAO.prototype.Read = function(id,callback){
 	this._conn.query('SELECT * FROM '+ this._table +' WHERE post_id = ?', id, callback);
 }
