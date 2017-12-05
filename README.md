@@ -1,4 +1,4 @@
-# SejaSpotChallenge v0.0 - Beta
+# SejaSpotChallenge v1.0
 [![N|Solid](./gitimg/icon.png)](http://elsweb.com.br)
 
 Project of Challenge SejaSpot, and my first app on node.js
