@@ -1,4 +1,5 @@
 [![N|Solid](https://drive.google.com/uc?id=1ZXPQV9o8xHnqCj49Yo5eUmfm0HaXbfDt)](http://elsweb.com.br)
+![N|Solid](https://drive.google.com/uc?id=1-lFd2viOP0urQQ_p9_fKngQ4R02Y3rgD)<share-social>
 
 SejaSpotChallenge versão 1.0
 ========================
@@ -107,6 +108,15 @@ Author
 Skills used
 ========================
 
-![N|Solid](https://drive.google.com/uc?id=16diPsCWSBdPUyz1NFtKZSBOlXntTxUjT)   ![N|Solid](https://drive.google.com/uc?id=1UgOq7QEQ2BEVSpVUeAzExY43nRAI8eWn)   ![N|Solid](https://drive.google.com/uc?id=1oncjdSGvUdUbs0t2W8XdSnVU1tvygpE0)
-   ![N|Solid](https://drive.google.com/uc?id=1q-21b8hJYoZ2IYAUGbE_4lwoiiqO7Rw8)   ![N|Solid](https://drive.google.com/uc?id=1XoJD92NPBQ9h0jdZDbWjtij3dT_WLFnH)   ![N|Solid](https://drive.google.com/uc?id=1rjZ6szYNzcu6d5nAVT7CvNx_TgGtvRey)   ![N|Solid](https://drive.google.com/uc?id=1rKr9mc3EEE8-HIV44DAv-7FEb1RUZLwZ)   ![N|Solid](https://drive.google.com/uc?id=1UO-CDMugAnOMb238zgJrOkphB9jn8vR1)   ![N|Solid](https://drive.google.com/uc?id=1eb_OLqKHFUPs6x-Ysv62feXHFyLbPRA1)   ![N|Solid](https://drive.google.com/uc?id=17mICnyngBMzHsD2mWofK1S--4YYondcY)
-   ![N|Solid](https://drive.google.com/uc?id=1F6xcgfgNN5LxPtFOQhJG73qsatbJqZlL)   ![N|Solid](https://drive.google.com/uc?id=1ldC35vLAOBM1YxuK8BLqYOeeZLp62T9y)
+![N|Solid](https://drive.google.com/uc?id=16diPsCWSBdPUyz1NFtKZSBOlXntTxUjT)<html>
+![N|Solid](https://drive.google.com/uc?id=1UgOq7QEQ2BEVSpVUeAzExY43nRAI8eWn)<css>
+![N|Solid](https://drive.google.com/uc?id=1oncjdSGvUdUbs0t2W8XdSnVU1tvygpE0)<js>
+![N|Solid](https://drive.google.com/uc?id=1q-21b8hJYoZ2IYAUGbE_4lwoiiqO7Rw8)<jquery>
+![N|Solid](https://drive.google.com/uc?id=1XoJD92NPBQ9h0jdZDbWjtij3dT_WLFnH)<mysql>
+![N|Solid](https://drive.google.com/uc?id=1rjZ6szYNzcu6d5nAVT7CvNx_TgGtvRey)<nodejs>
+![N|Solid](https://drive.google.com/uc?id=1rKr9mc3EEE8-HIV44DAv-7FEb1RUZLwZ)<mocha-nodejs>
+![N|Solid](https://drive.google.com/uc?id=1UO-CDMugAnOMb238zgJrOkphB9jn8vR1)<jade-nodejs>
+![N|Solid](https://drive.google.com/uc?id=1eb_OLqKHFUPs6x-Ysv62feXHFyLbPRA1)<json>
+![N|Solid](https://drive.google.com/uc?id=17mICnyngBMzHsD2mWofK1S--4YYondcY)<git>
+![N|Solid](https://drive.google.com/uc?id=1F6xcgfgNN5LxPtFOQhJG73qsatbJqZlL)<github>
+![N|Solid](https://drive.google.com/uc?id=1ldC35vLAOBM1YxuK8BLqYOeeZLp62T9y)<sublimetext>
